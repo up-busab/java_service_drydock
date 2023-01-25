@@ -1,0 +1,63 @@
+version: '3.6'
+
+services:
+
+  service1:
+    container_name: service1
+    image: upbusab/service1
+    ports: 
+      - "7778:7778"
+    depends_on:
+      - "activemq"
+
+  service2:
+    container_name: service2
+    image: upbusab/service2
+    environment:
+      - DELAY_STARTUP=10
+
+#  envoy:
+#    container_name: local-envoy
+#    image: envoyproxy/envoy-alpine:v1.21-latest
+#    volumes:
+#      - ./volumes/envoy.yaml:/envoy-custom.yaml
+#    ports:
+#      - "5656:5656"
+#    command: 
+#      - -c
+#      - /envoy-custom.yaml
+
+  activemq:
+    container_name: local-amq
+    image: rmohr/activemq:5.14.5
+    volumes:
+      - ./volumes/activemq/conf:/opt/activemq/conf
+    ports:
+      - "61616:61616"
+      - "8161:8161"
+    healthcheck:
+      test: ["CMD", "curl", "http://localhost:8161"]
+      interval: 2s
+
+  mariadb:
+    container_name: local-sql
+    image: mariadb:10.6
+    environment:
+      MYSQL_ROOT_PASSWORD: pass
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    entrypoint:
+      sh -c "/usr/local/bin/docker-entrypoint.sh --default-time-zone='+00:00'"
+    ports:
+      - 3306:3306
+    volumes:
+      - db-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", 'mysqladmin', 'ping', '-h', 'localhost', '-uuser', '-ppassword']
+      interval: 2s
+    restart: always
+
+volumes:
+  db-data:
+    external: false
+
