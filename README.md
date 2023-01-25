@@ -1,4 +1,4 @@
-EMS Test Ecosystem
+Java Service Template
 
 config contains properties files for all services defined in docker-compose.yml
 
