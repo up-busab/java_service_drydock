@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0
+                              http://maven.apache.org/xsd/settings-1.0.0.xsd">
+  <!-- localRepository
+   | The path to the local repository maven will use to store artifacts.
+   | Default: ~/.m2/repository
+  <localRepository>/path/to/local/repo</localRepository>
+  -->
+  <localRepository>C:\Users\matt.miller\.m2\repository</localRepository>
+  <interactiveMode>true</interactiveMode>
+
+  <pluginGroups>
+    <!-- pluginGroup
+     | Specifies a further group identifier to use for plugin lookup.
+    <pluginGroup>com.your.plugins</pluginGroup>
+    -->
+  </pluginGroups>
+
+  <proxies>
+    <!-- proxy>
+      <id>optional</id>
+      <active>true</active>
+      <protocol>http</protocol>
+      <username>proxyuser</username>
+      <password>proxypass</password>
+      <host>proxy.host.net</host>
+      <port>80</port>
+      <nonProxyHosts>local.net|some.host.com</nonProxyHosts>
+    </proxy -->
+  </proxies>
+
+  <!-- servers
+   | This is a list of authentication profiles, keyed by the server-id used within the system.
+   | Authentication profiles can be used whenever maven must make a connection to a remote server.
+   |-->
+  <servers>
+  
+    <!-- To generate a new encrypted password, first make sure you still have   -->
+    <!-- a master password set in settings-security.xml (shouldn't need to      -->
+    <!-- change it once set).                                                   -->
+    <!-- Then run command line 'mvn -ep' it will prompt you to add the password -->
+    <!-- used to connect to Nexus, SVN, and Jenkins.                            -->
+    <!-- Copy the resulting encryption string to the applicable server defs     -->
+    <!-- below in password. It can also run if you leave it blank as shown here.-->
+    <server>
+      <id>snapshots</id>
+      <username>matt.miller</username>
+	  <password>{oWJW0DVMD/EH/bRitsq7YfSIuwiPrN1hzxwtgkc8YDA=}</password>
+    </server>
+    <server>
+      <id>releases</id>
+      <username>matt.miller</username>
+	  <password>{oWJW0DVMD/EH/bRitsq7YfSIuwiPrN1hzxwtgkc8YDA=}</password>
+    </server>
+
+    <!-- NMDP Nexus (main target id) -->
+    <server>
+      <id>nexus</id>
+      <username>matt.miller</username>
+	  <password>{oWJW0DVMD/EH/bRitsq7YfSIuwiPrN1hzxwtgkc8YDA=}</password>
+    </server>
+    <server>
+      <id>public</id>
+    </server>
+  </servers>
+
+  <mirrors>
+    <!--mirror>
+      <id>nexus</id>
+      <mirrorOf>*</mirrorOf>
+      <url>http://nexus.fake-placeholder.com:8081/repository/maven-public/</url>
+    </mirror-->
+    <mirror>
+      <id>public</id>
+      <mirrorOf>*</mirrorOf>
+      <url>http://repo1.maven.org/maven2/</url>
+    </mirror>
+  </mirrors>
+
+  <profiles>
+    <profile>
+      <id>nexus</id>
+      <repositories>
+        <repository>
+          <id>central</id>
+          <name>Central</name>
+          <url>http://nexus.fake-placeholder.com/nexus/content/repositories/central/</url>
+          <snapshots>
+            <enabled>true</enabled>
+          </snapshots>
+          <releases>
+            <enabled>true</enabled>
+          </releases>
+        </repository>
+      </repositories>
+
+      <pluginRepositories>
+        <pluginRepository>
+          <id>central</id>
+          <url>http://nexus.fake-placeholder.com/nexus/content/repositories/central/</url>
+          <releases>
+            <enabled>true</enabled>
+          </releases>
+          <snapshots>
+            <enabled>true</enabled>
+          </snapshots>
+        </pluginRepository>
+      </pluginRepositories>
+
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+    </profile>
+  </profiles>
+
+</settings>

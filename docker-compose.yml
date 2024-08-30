@@ -10,11 +10,11 @@ services:
     depends_on:
       - "activemq"
 
-  service2:
-    container_name: service2
-    image: upbusab/service2
-    environment:
-      - DELAY_STARTUP=10
+#  service2:
+#    container_name: service2
+#    image: upbusab/service2
+#    environment:
+#      - DELAY_STARTUP=10
 
 #  envoy:
 #    container_name: local-envoy
