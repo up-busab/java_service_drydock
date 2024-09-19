@@ -1,0 +1,26 @@
+JSD:
+  ALPINE:
+    JDK: "amazoncorretto:22-alpine-jdk"
+    RUNTIME: "alpine:latest"  
+    RUNTIME_8: "eclipse-temurin:8-jre-alpine"
+  
+  PROPS:
+    LOCATION: "src/main/resources/application-local-composition.properties"
+
+  CONTEXT:
+    IMAGE_22: "upbusab/java-build-context-22" 
+    IMAGE_GRAAL_22: "upbusab/java-build-context-graal-22" 
+
+  LIB_BUILDER:
+    TAG: "upbusab/lib_builder"
+    INTERNAL_M2: "/lib_builder/m2"
+
+  M2:
+    OVERRIDE: "m2_override/none"
+    TARGET: "volumes/m2"    
+
+  PYTHON:
+    REQS: "python-requirements.txt"  
+
+BUILDKIT:
+  PROGRESS: plain

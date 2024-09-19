@@ -42,7 +42,6 @@ RUN mvn package -DskipTests
 RUN java -Djarmode=layertools -jar target/${APP_NAME}.jar extract --destination deploy
 COPY --from=base_build /build_context/run_prod.sh deploy/entry.sh
 
-
 #finally, select build and create deployment
 FROM ${BUILD_MODE}_build AS intermediate
 

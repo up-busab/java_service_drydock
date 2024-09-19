@@ -1,21 +1,22 @@
-ARG BASE_MAVEN=maven:3.6.1-jdk-13-alpine 
+ARG ALPINE_JDK_IMAGE=container-registry.oracle.com/graalvm/native-image:22
 
-FROM $BASE_MAVEN 
+FROM $ALPINE_JDK_IMAGE 
+ARG M2_OVERRIDE=m2_override/none
+ARG TMP_M2=/build_context/tmp_m2
+ARG LOCAL_M2=/root/.m2
+ARG PYTHON_REQS=""
 
-#use provided settings
-RUN mkdir -p /root/.m2/repository
-COPY m2_override/*.xml /root/.m2
+WORKDIR /build_context
 
-#mvn install any JARs we want to override with
-RUN mkdir /usr/local/tmp_m2_override
-COPY m2_override/*.jar  /usr/local/tmp_m2_override
-COPY m2_override/install.sh  /usr/local/tmp_m2_override
-RUN --mount=type=cache,target=/root/.m2/repository usr/local/tmp_m2_override/install.sh
-#RUN /usr/local/tmp_jar_overrides/install.sh
+RUN microdnf install maven python3 python3-pip -y || apk add maven python3 py3-pip
+COPY scripts/*.sh /build_context 
 
-#entry scripts
-RUN mkdir -p /build_context
-COPY run_dev.sh /build_context 
-COPY run_prod.sh /build_context 
+RUN echo ${PYTHON_REQS} | tr ';' '\n' > requirements.txt
+RUN rm -rf /usr/lib/python*/EXTERNALLY-MANAGED
+RUN pip install -r requirements.txt
 
-#ENTRYPOINT ["tail", "-f", "/dev/null"]
+RUN mkdir -p ${LOCAL_M2}/repository && mkdir ${TMP_M2}
+COPY ${M2_OVERRIDE}/*.xml ${LOCAL_M2}
+COPY ${M2_OVERRIDE}/repository/* ${LOCAL_M2}
+COPY ${M2_OVERRIDE}/*.jar ${TMP_M2}
+RUN --mount=type=cache,target=${LOCAL_M2}/repository /build_context/m2_jar_installer.sh ${TMP_M2} ${LOCAL_M2}/repository
