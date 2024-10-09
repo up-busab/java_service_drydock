@@ -25,15 +25,17 @@ build_lib()
     local LIB_DIR=$2
     local LIB_NAME=$3
     
-    local BUILD_ARGS=""
+    local BUILD_ARGS="--progress plain --no-cache"
     BUILD_ARGS="$BUILD_ARGS --build-arg BUILD_CONTEXT_IMAGE=$LIB_CONTEXT"
     BUILD_ARGS="$BUILD_ARGS --build-arg LIB_NAME=$LIB_NAME" 
+    BUILD_ARGS="$BUILD_ARGS --build-arg M2_OVERRIDE=$JSD_M2_OVERIDE"
     BUILD_ARGS="$BUILD_ARGS --build-arg M2_OVERRIDE=$JSD_M2_OVERIDE"
 
     local DOCKERFILE=$IMAGE_PATH/java_lib/Dockerfile
 
     cd $LIB_DIR && docker build $BUILD_ARGS -t $JSD_LIB_BUILDER_TAG -f $DOCKERFILE . || exit 1
     docker run -it -v $PROJECT_PATH/$JSD_M2_TARGET:$JSD_LIB_BUILDER_INTERNAL_M2 $JSD_LIB_BUILDER_TAG
+
 }
 
 build_lib_graal()
